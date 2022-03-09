@@ -21,6 +21,17 @@ server <- function(input, output) {
     
   })
   
+  main_plot_df <- reactive({
+    ts_df <- stocks %>% 
+      filter(security %in% input$selected_stocks) %>%
+      as_tsibble(index = "date", key = "symbol")
+  })
+  
+  output$stock_plot <- renderPlot({
+    autoplot(main_plot_df(), close) +
+      labs(title = "Closing Price")
+  })
+  
   plot_df <- reactive({
     stocks <- stocks[stocks$gics_sector == input$selected_sector,]
     
