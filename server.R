@@ -1,5 +1,6 @@
 library(shiny)
 library(fpp3)
+library(dplyr)
 
 server <- function(input, output) {
   
@@ -7,17 +8,13 @@ server <- function(input, output) {
     
     stocks <- stocks[stocks$gics_sector == input$selected_sector,]
     
-    selected_volume <- head(sort(stocks$volume, decreasing = TRUE), n = 3)
+    top_vol <- stocks %>% 
+      group_by(symbol) %>% 
+      summarise (avg_vol = mean(volume)) %>% 
+      arrange(desc(avg_vol)) %>%
+      head(3)
     
-    filtered_volume <- stocks %>% 
-      filter(volume %in% selected_volume)
-    
-    
-    filtered_stocks <- stocks %>% 
-      filter(symbol %in% unique(filtered_volume$symbol)) %>% 
-      mutate(volume = log(volume))
-    
-    unique(filtered_stocks[,c(1,9)])
+    top_vol
     
   })
   
@@ -37,25 +34,23 @@ server <- function(input, output) {
   plot_df <- reactive({
     stocks <- stocks[stocks$gics_sector == input$selected_sector,]
     
-    selected_volume <- head(sort(stocks$volume, decreasing = TRUE), n = 3)
-    
-    filtered_volume <- stocks %>% 
-      filter(volume %in% selected_volume)
-    
+    top_vol <- stocks %>% 
+      group_by(symbol) %>% 
+      summarise (avg_vol = mean(volume)) %>% 
+      arrange(desc(avg_vol)) %>% 
+      head(3)
     
     filtered_stocks <- stocks %>% 
-      filter(symbol %in% unique(filtered_volume$symbol)) %>% 
+      filter(stocks$symbol %in% top_vol$symbol) %>% 
       mutate(volume = log(volume))
     
-    
-    ts_df <- as_tsibble(
+    my_df <- as_tsibble(
       filtered_stocks,
       index = "date",
-      key = "symbol",
-      
+      key = "symbol"
     ) 
     
-  })
+})
   
   output$ts_plot <- renderPlot({
     
