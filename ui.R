@@ -12,9 +12,17 @@ ui <- fluidPage(
       
       selectInput(inputId = "selected_sector",
                   label = "Select sector:",
-                  choice = unique(stocks$gics_sector)
+                  choice = unique(stocks$gics_sector),
+      ),
+      
+      dateRangeInput(inputId = 'date',
+                     label = 'Select Date Range',
+                     start = min(stocks$date),
+                     end = max(stocks$date),
+                     min = min(stocks$date),
+                     max = max(stocks$date),
       )
-    ),
+      ),
     mainPanel(
       plotOutput("stock_plot"),
       
@@ -22,7 +30,7 @@ ui <- fluidPage(
       
       tableOutput("stock_info"),
       
-      plotOutput("ts_plot")
+      plotOutput("ts_plot"),
+      )
     )
-  )
 )
