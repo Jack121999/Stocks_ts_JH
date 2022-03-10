@@ -1,7 +1,7 @@
 # Stocks!
 #Features
 
-Cole- Allows user to select a certain industry which will show the best and worst stocks for it.
+Cole- Allows user to select a certain industry which will show the best stocks by volume traded for it.
 
 Jack- First feature, allows users to select stocks to plot.
 
