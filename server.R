@@ -20,7 +20,8 @@ server <- function(input, output) {
   
   main_plot_df <- reactive({
     ts_df <- stocks %>% 
-      filter(security %in% input$selected_stocks) %>%
+      filter(security %in% input$selected_stocks)
+      ts_df[c(1,2, input$select)]%>%
       as_tsibble(index = "date", key = "symbol") %>%
       filter(date >= input$date[1],
              date <= input$date[2])
