@@ -9,7 +9,7 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       multiInput(inputId = "selected_stocks", label = "Select Stocks to Plot:", choices = unique(stocks$security), selected = "Apple Inc."),
-      selectInput("select", label = h3("Select Statistic"), 
+      selectInput("select", label = "Select Statistic", 
                   choices = list("Open" = 4, "Close" = 5, "Low" = 6, "High" = 7, "Volume" = 8), 
                   selected = 4),
       selectInput(inputId = "selected_sector",
